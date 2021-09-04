@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace PooBasics
 {
-    class Box
+    interface IBoxeable
+    {
+        int Volume { get; }
+
+        void DoubleSize();
+    }
+
+    class Box : ICloneable, IBoxeable, IComparable
     {
         private int width;
         private int length;
@@ -57,19 +64,67 @@ namespace PooBasics
             }
         }
 
-        public int Volume { get => width * length * height; }
+        public int Volume => width * length * height;
+
+        // default constructor
+        public Box() : this(1) { }
+
+        public Box(int size) : this(size, size, size) {}
+
+        public Box(int width, int length, int height)
+        {
+            Width = width;
+            Length = length;
+            Height = height;
+        }
+
+        // copy constructor
+        public Box(Box box) : this(box.width, box.length, box.height) {}
+
+        public void DoubleSize()
+        {
+            Width *= 2;
+            Length *= 2;
+            Height *= 2;
+        }
+
+        // Clone(Box this)
+        public object Clone() => new Box(this);
+
+        public int CompareTo(object obj) =>
+            Volume.CompareTo((obj as Box).Volume);
     }
 
     class Program
     {
         static void Main(string[] args)
         {
-            Box b = new Box();
-            b.Width = 2;
-            b.Length = 1;
-            b.Height = 3;
+            Box b1 = new Box(4, 2, 3);
+            Box b2 = (Box)b1.Clone(); // Clone(b1)
 
-            Console.WriteLine($"Volume: {b.Volume}");
+            Box[] boxes =
+            {
+                new Box(1, 3, 5),
+                new Box(3),
+                new Box(),
+                new Box(3, 2, 1),
+                new Box(b1)
+            };
+
+            Array.Sort(boxes);
+
+            foreach (Box box in boxes)
+            {
+                Console.WriteLine($"Volume: {box.Volume}");
+            }
+
+            int totalVolume = 0;
+            foreach (Box box in boxes)
+            {
+                totalVolume += box.Volume;
+            }
+
+            Console.WriteLine($"\nTotal volume: {totalVolume}");
         }
 
         static void MainOld(string[] args)
