@@ -100,6 +100,18 @@ namespace PooBasics
         static void Main(string[] args)
         {
             Box b1 = new Box(4, 2, 3);
+
+            IBoxeable b3 = b1;
+            Console.WriteLine($"Volume: {b3.Volume}");
+
+            ICloneable c1 = b1;
+            //c1.Clone();
+
+            IComparable c2 = b1;
+            //c2.CompareTo(null);
+
+            // *********************************
+
             Box b2 = (Box)b1.Clone(); // Clone(b1)
 
             Box[] boxes =
