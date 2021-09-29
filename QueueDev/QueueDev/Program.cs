@@ -12,7 +12,7 @@ namespace QueueDev
     {
         static void Main(string[] args)
         {
-            ArrayQueue<int> queue = new ArrayQueue<int>(10);
+            ArrayQueue<int> queue = new ArrayQueue<int>(8); //4,8,16
             WriteLine(queue);
 
             queue.Enqueue(5);
@@ -45,6 +45,21 @@ namespace QueueDev
             queue.Enqueue(5);
             queue.Enqueue(3);
             queue.Enqueue(1);
+            WriteLine(queue);
+
+            for (int i = 0; i < 5; ++i)
+            {
+                queue.Dequeue();
+            }
+            WriteLine(queue);
+
+            queue.Dequeue();
+            WriteLine(queue);
+
+            for (int i = 0; i < 3; ++i)
+            {
+                queue.Dequeue();
+            }
             WriteLine(queue);
         }
     }

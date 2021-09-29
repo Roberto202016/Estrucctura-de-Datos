@@ -10,7 +10,7 @@ namespace DtsLib
     {
         private T[] data;
         private int index;
-        //private readonly int initialCapacity;
+        private readonly int initialCapacity;
 
         public int Capacity { get; private set; }
         public int Size => index + 1;
@@ -20,13 +20,19 @@ namespace DtsLib
         public ArrayQueue(int capacity)
         {
             data = new T[capacity];
-            //initialCapacity = capacity;
+            initialCapacity = capacity;
             Capacity = capacity;
             index = -1;
         }
 
         public void Enqueue(T item)
         {
+            if (index + 1 == Capacity)
+            {
+                Array.Resize(ref data, Capacity * 2);
+                Capacity *= 2;
+            }
+
             data[index + 1] = item;
             index++;
         }
@@ -34,6 +40,13 @@ namespace DtsLib
         public T Dequeue()
         {
             if (Empty) { throw new InvalidOperationException(); }
+
+            if ((index - 1) < (Capacity / 5))
+            {
+                int newCapacity = Math.Max(initialCapacity, Capacity / 2);
+                Array.Resize(ref data, newCapacity);
+                Capacity = newCapacity;
+            }
 
             T aux = data[0];
             for (int i = 0; i < index; i++)
@@ -58,6 +71,7 @@ namespace DtsLib
             return data[index];
         }
 
+#if DEBUG
         public override string ToString()
         {
             string str = $"C:{Capacity}, S:{Size}, E:{Empty}";
@@ -71,5 +85,6 @@ namespace DtsLib
 
             return str;
         }
+#endif
     }
 }
